@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/Home/quran/items_sura_name.dart';
+import 'package:provider/provider.dart';
+import 'package:untitled/my_theme.dart';
+import '../../providers/app_config_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QuranTap extends StatelessWidget {
   List<String> names = [
@@ -121,29 +125,39 @@ class QuranTap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return Column(
       children: [
         Center(child: Image(image: AssetImage('assets/images/quran_icon.png'))),
         Divider(
-          color: Theme.of(context).primaryColor,
+          color: provider.isDark()
+              ? MyTheme.yellowColor
+              : Theme.of(context).primaryColor,
           thickness: 3,
         ),
-        Text(
-          'Sura Number',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text(AppLocalizations.of(context)!.sura_name,
+            style: provider.isDark()
+                ? Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: MyTheme.whiteColor)
+                : Theme.of(context).textTheme.titleMedium),
         Divider(
-          color: Theme.of(context).primaryColor,
+          color: provider.isDark()
+              ? MyTheme.yellowColor
+              : Theme.of(context).primaryColor,
           thickness: 3,
         ),
         Expanded(
           child: ListView.separated(
               itemBuilder: (context, index) => ItemSuraName(
-                    name: names[index],
-                    index: index,
-                  ),
+                name: names[index],
+                index: index,
+              ),
               separatorBuilder: (context, index) => Divider(
-                    color: Theme.of(context).primaryColor,
+                    color: provider.isDark()
+                        ? MyTheme.yellowColor
+                        : Theme.of(context).primaryColor,
                     thickness: 2,
                   ),
               itemCount: names.length),
